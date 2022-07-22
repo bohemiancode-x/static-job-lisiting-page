@@ -1,16 +1,42 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useFetch } from '../hooks/useFetch'
+import Jobfilter from './Jobfilter'
 
 export default function Joblist() {
     const {data} = useFetch('/data.json')
+    const [filters, setFilters] = useState([])
+    const [filterActive, setFilterActive] = useState(false)
 
-    console.log(data);
+    const addFilter = (newFilter) => {
+        if(filters.indexOf(newFilter) === -1) {
+            setFilters(prevFilters => [...prevFilters, newFilter])
+        }
+        setFilterActive(true)
+    }
+    const clearFilter = () => {
+        setFilters([])
+        setFilterActive(false)
+    }
+    const removeFilter = (filter) => {
+        let filteredArray = filters.filter(e => {
+            return e !== filter
+        })
+        setFilters(filteredArray);
+
+        if(filteredArray.length == 0) {
+            setFilterActive(false)
+        } 
+       
+    }
+
+    // console.log(filters);
 
   return (
     <div>
         <ul className='joblist'>
+            <li className={filterActive ? 'card pl-4' : 'hidden'}><Jobfilter removeFilter={removeFilter} filters={filters} /><button onClick={clearFilter} className='ml-auto px-8 text-primary hover:underline hover:font-bold'>clear</button></li>
             {data && data.map((job) => {
-                return <li key={job.id} className='sm:flex sm:p-0 p-4 bg-white rounded w-11/12 drop-shadow-md my-10 sm:my-5 mx-auto items-center relative'>
+                return <li key={job.id} className='card'>
                 <span className={job.featured ? 'bg-primary absolute sm:w-1 w-2 rounded-l-lg h-full top-0 left-0' : 'hidden'}></span>
                 <div className='absolute -top-7 left-4 sm:static sm:ml-6'><img className='sm:h-20 sm:w-20 w-14 ' src={job.logo} alt="photosnap" /></div>
                 <div className='ml-5 pt-5'>
@@ -19,7 +45,7 @@ export default function Joblist() {
                         <p className={job.new ? 'bg-primary text-white rounded-xl px-2 font-bold' : 'hidden'}>NEW!</p>
                         <p className={job.featured ? 'bg-black text-white rounded-xl px-2 font-bold' : 'hidden'}>FEATURED</p>
                     </div>
-                    <h2 className='font-bold sm:text-lg sm:mt-1 mt-2 '>{job.position}</h2>
+                    <h2 className='font-bold sm:text-lg sm:mt-1 mt-2 hover:text-primary cursor-pointer'>{job.position}</h2>
                     <div className='flex gap-4 opacity-50 sm:text-xs text-sm font-bold sm:mt-1 sm:mb-4 mt-2'>
                         <p>{job.postedAt}</p>
                         <img className='w-2 h-2 my-auto opacity-50' src="./dot.svg" alt="" />
@@ -30,13 +56,13 @@ export default function Joblist() {
                 </div>
                 <span className='sm:hidden block w-9/10 h-0.5 mt-5 opacity-50 bg-slate-600'></span>
                 <div className='sm:flex flex-row gap-2 sm:ml-auto sm:px-8 py-4'>
-                    <p className='info'>{job.role}</p>
-                    <p className='info'>{job.level}</p>
+                    <p onClick={() => addFilter(`${job.role}`)} className='info'>{job.role}</p>
+                    <p onClick={() => addFilter(`${job.level}`)} className='info'>{job.level}</p>
                     {job.languages.map((l) => {
-                        return <p key={l} className='info' >{l}</p>
+                        return <p onClick={() => addFilter(JSON.stringify(l))} key={l} className='info' >{l}</p>
                     })}
                     {job.tools.map((t) => {
-                        return <p key={t} className='info' >{t}</p>
+                        return <p onClick={() => addFilter(JSON.stringify(t))} key={t} className='info' >{t}</p>
                     })}
                     
                 </div>
