@@ -5,6 +5,7 @@ export default function ProjectFilter({ filters, removeFilter }) {
 
     const handleClick = (newFilter) => {
         removeFilter(newFilter)
+        console.log(filters);
     }
 
 
