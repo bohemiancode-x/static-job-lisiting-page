@@ -12,6 +12,6 @@
         @apply text-primary bg-body p-2 m-2 rounded gap-4 sm:text-sm text-sm inline-flex font-bold;  
     }
     .card {
-        @apply sm:flex sm:p-0 p-4 bg-white rounded w-11/12 drop-shadow-md my-10 sm:my-5 mx-auto items-center relative;
+        @apply sm:flex sm:p-0 p-4 bg-white rounded w-11/12 drop-shadow-md my-10 sm:my-5 mx-auto items-center relative hover:scale-105 hover:drop-shadow-lg ease-in duration-200 ;
     }
 }

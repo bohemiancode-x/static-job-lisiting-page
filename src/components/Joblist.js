@@ -12,28 +12,36 @@ export default function Joblist() {
 
 
     const jobsData = data && data.map((job) => {
-        let {id, company, logo, featured, position, postedAt, contract, location } = job;
+        let {id, company, role, level, languages, tools, logo, featured, position, postedAt, contract, location } = job;
         let newJob = job.new;
         let roleAndLevel = [];
         roleAndLevel.push(job.role);
         roleAndLevel.push(job.level);
         let filters = [];
         filters.push(...roleAndLevel, ...job.languages, ...job.tools);
-        return {id, company, logo, featured, position, postedAt, contract, location, newJob, filters};
+        return {id, company, newJob, role, level, languages, tools, logo, featured, position, postedAt, contract, location, filters};
     })
 
     useEffect(() => {
          localStorage.setItem('jobs', JSON.stringify(jobsData))
+         let Json = JSON.parse(localStorage.getItem('jobs'))
+         setJobs(Json)
     }, [data])
     
-    //console.log(JSON.parse(localStorage.getItem('jobs')));
+   
+
+    useEffect(() => {
+        const getJobsByFilter = () => {
+           
+        }
+        let filtered = jobs.filter((job) => filters.every((e) => job.filters.includes(e)));
+        setFilteredJobs(filtered)
+   
+        console.log(jobs);
+        
+    },[filters])
+    console.log(filteredJobs);
     
-    const getJobsByFilter = (filters) => {
-        let Json = JSON.parse(localStorage.getItem('jobs'))
-        setJobs(Json)
-        let filteredJobs = jobs.filter((job) => filters.every((e) => job.filters.includes(e)));
-        return filteredJobs
-    }
    
     
     const addFilter = (newFilter) => {
@@ -41,10 +49,7 @@ export default function Joblist() {
             setFilters(prevFilters => [...prevFilters, newFilter])
         }
         setFilterActive(true)
-        //console.log(filters);
-        setFilteredJobs(getJobsByFilter(filters))
         
-       
     }
     const clearFilter = () => {
         setFilters([])
@@ -55,11 +60,11 @@ export default function Joblist() {
             return e !== filter
         })
         setFilters(filteredArray);
-        setFilteredJobs(getJobsByFilter(filters))
+        //console.log(filters);
         if(filteredArray.length == 0) {
             setFilterActive(false)
-        }  
-       
+        }
+      
     }
     
    
@@ -67,8 +72,9 @@ export default function Joblist() {
   return (
     <div>
         <ul className='joblist'>
-            <li className={filterActive ? 'card pl-4' : 'hidden'}><Jobfilter removeFilter={removeFilter} filters={filters} /><button onClick={clearFilter} className='ml-auto px-8 text-primary hover:underline hover:font-bold'>clear</button></li>
-            {data && <Jobcard data={filterActive ? data : data } addFilter={addFilter} filters={filters} />}
+            <li className={filterActive ? 'card pl-4 hover:scale-100' : 'hidden'}><Jobfilter removeFilter={removeFilter} filters={filters} /><button onClick={clearFilter} className='ml-auto px-8 text-primary hover:underline hover:font-bold'>clear</button></li>
+            {isPending && <p className='w-screen h-screen text-center text-lg mt-52 font-bold'>Loading...</p>}
+            {data && <Jobcard data={filterActive ? filteredJobs : data } addFilter={addFilter} filters={filters} />}
 
         </ul>
     </div>

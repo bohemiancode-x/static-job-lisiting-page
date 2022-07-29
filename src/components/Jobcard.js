@@ -16,6 +16,7 @@ export default function Jobcard({ data, addFilter }) {
                     <div className='flex gap-3 text-sm'>
                         <h3 className='text-primary font-bold'>{job.company}</h3>
                         <p className={job.new ? 'bg-primary text-white rounded-xl px-2 font-bold' : 'hidden'}>NEW!</p>
+                        <p className={job.newJob ? 'bg-primary text-white rounded-xl px-2 font-bold' : 'hidden'}>NEW!</p>
                         <p className={job.featured ? 'bg-black text-white rounded-xl px-2 font-bold' : 'hidden'}>FEATURED</p>
                     </div>
                     <h2 className='font-bold sm:text-lg sm:mt-1 mt-2 hover:text-primary cursor-pointer'>{job.position}</h2>
