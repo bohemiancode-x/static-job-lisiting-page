@@ -5,6 +5,9 @@
 @tailwind utilities;
 
 @layer components {
+    .App {
+        @apply min-h-screen;
+    }
     .info {
        @apply text-primary hover:text-white hover:bg-primary cursor-pointer bg-body sm:px-2 p-2 m-2 rounded gap-2 sm:text-sm text-lg inline-flex font-bold;
     }
