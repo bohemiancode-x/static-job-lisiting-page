@@ -31,16 +31,10 @@ export default function Joblist() {
    
 
     useEffect(() => {
-        const getJobsByFilter = () => {
-           
-        }
         let filtered = jobs.filter((job) => filters.every((e) => job.filters.includes(e)));
         setFilteredJobs(filtered)
-   
-        console.log(jobs);
-        
     },[filters])
-    console.log(filteredJobs);
+    //console.log(filteredJobs);
     
    
     
